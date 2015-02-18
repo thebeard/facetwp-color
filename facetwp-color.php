@@ -6,7 +6,7 @@ Description: A FacetWP facet to filter products by color
 Version: 1.0
 Author: Matt Gibbs
 Author URI: https://facetwp.com/
-GitHub Plugin URI: https://github.com/mgibbs189/facetwp-color
+GitHub Plugin URI: https://github.com/FacetWP/facetwp-color
 
 Copyright 2014 Matt Gibbs
 
