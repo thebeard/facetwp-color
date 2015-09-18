@@ -136,12 +136,12 @@ class FacetWP_Facet_Color
 (function($) {
     wp.hooks.addAction('facetwp/load/color', function($this, obj) {
         $this.find('.facet-source').val(obj.source);
-        $this.find('.type-color .facet-count').val(obj.count);
+        $this.find('.facet-count').val(obj.count);
     });
 
     wp.hooks.addFilter('facetwp/save/color', function($this, obj) {
         obj['source'] = $this.find('.facet-source').val();
-        obj['count'] = $this.find('.type-color .facet-count').val();
+        obj['count'] = $this.find('.facet-count').val();
         return obj;
     });
 
@@ -158,7 +158,19 @@ class FacetWP_Facet_Color
     function front_scripts() {
 ?>
 
-<link href="<?php echo WP_CONTENT_URL; ?>/plugins/facetwp-color/front.css" rel="stylesheet">
+<style type="text/css">
+.facetwp-color {
+    display: inline-block;
+    margin: 0 8px 8px 0;
+    box-shadow: 1px 2px 3px #ccc;
+    width: 32px;
+    height: 32px;
+}
+
+.facetwp-color.checked {
+    border: 1px solid #333;
+}
+</style>
 
 <script>
 (function($) {
@@ -194,7 +206,7 @@ class FacetWP_Facet_Color
      */
     function settings_html() {
 ?>
-        <tr class="facetwp-conditional type-color">
+        <tr>
             <td>
                 <?php _e('Count', 'fwp'); ?>:
                 <div class="facetwp-tooltip">
