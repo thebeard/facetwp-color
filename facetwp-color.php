@@ -3,12 +3,11 @@
 Plugin Name: FacetWP - Color
 Plugin URI: https://facetwp.com/
 Description: A FacetWP facet to filter products by color
-Version: 1.0
+Version: 1.0.1
 Author: Matt Gibbs
-Author URI: https://facetwp.com/
 GitHub Plugin URI: https://github.com/FacetWP/facetwp-color
 
-Copyright 2014 Matt Gibbs
+Copyright 2015 Matt Gibbs
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -163,8 +162,9 @@ class FacetWP_Facet_Color
     display: inline-block;
     margin: 0 8px 8px 0;
     box-shadow: 1px 2px 3px #ccc;
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
 }
 
 .facetwp-color.checked {
@@ -183,7 +183,11 @@ class FacetWP_Facet_Color
     });
 
     wp.hooks.addAction('facetwp/ready', function() {
-        $(document).on('click', '.facetwp-facet .facetwp-color:not(.disabled)', function() {
+        $(document).on('click touchstart', '.facetwp-facet .facetwp-color:not(.disabled)', function(e) {
+            if (true === e.handled) {
+                return false;
+            }
+            e.handled = true;
             $(this).toggleClass('checked');
             var $facet = $(this).closest('.facetwp-facet');
             FWP.autoload();
