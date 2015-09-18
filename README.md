@@ -1,4 +1,1 @@
-# facetwp-color
-A color facet for the FacetWP plugin
-
-![http://i.imgur.com/rvRUEjp.png](http://i.imgur.com/rvRUEjp.png)
+[Learn more about the FacetWP color add-on](https://facetwp.com/add-ons/color/)
