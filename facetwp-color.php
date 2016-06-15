@@ -3,26 +3,14 @@
 Plugin Name: FacetWP - Color
 Plugin URI: https://facetwp.com/
 Description: A FacetWP facet to filter products by color
-Version: 1.0.1
-Author: Matt Gibbs
-GitHub Plugin URI: https://github.com/FacetWP/facetwp-color
-
-Copyright 2015 Matt Gibbs
-
-This program is free software; you can redistribute it and/or
-modify it under the terms of the GNU General Public License
-as published by the Free Software Foundation; either version 2
-of the License, or (at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+Version: 1.1
+Author: FacetWP, LLC
+GitHub URI: facetwp/facetwp-color
 */
 
-// exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) or exit;
 
+include( dirname( __FILE__ ) . '/github-updater.php' );
 
 function fwp_color_facet( $facet_types ) {
     $facet_types['color'] = new FacetWP_Facet_Color();
