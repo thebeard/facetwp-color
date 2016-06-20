@@ -10,8 +10,6 @@ GitHub URI: facetwp/facetwp-color
 
 defined( 'ABSPATH' ) or exit;
 
-include( dirname( __FILE__ ) . '/github-updater.php' );
-
 function fwp_color_facet( $facet_types ) {
     $facet_types['color'] = new FacetWP_Facet_Color();
     return $facet_types;
