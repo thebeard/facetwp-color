@@ -84,6 +84,18 @@ class FacetWP_Facet_Color
 
         $output = $wpdb->get_results( $sql, ARRAY_A );
 
+        // Include support for YITH WooCommerce Color and Label Variations
+        if ( defined( 'YITH_WCCL' ) ) {
+            if (!empty( $output ) ) {
+                $counter = 0;
+                foreach( $output as $color_selection ) {
+                    $value = get_term_meta( $color_selection[ 'term_id' ], 'pa_colors_yith_wccl_value', true );
+                    if ( $value ) $output[ $counter ][ 'facet_display_value' ] = $value;
+                    $counter++;
+                }
+            }
+        }
+
         return $output;
     }
 
