@@ -277,7 +277,7 @@ function yith_color_label_facetwp_color_support( $output ) {
         if (!empty( $output ) ) {
             $counter = 0;
             foreach( $output as $color_selection ) {
-                $value = get_term_meta( $color_selection[ 'term_id' ], 'pa_colors_yith_wccl_value', true );
+                $value = get_term_meta( $color_selection[ 'term_id' ], 'pa_filter-colour_yith_wccl_value', true );
                 if ( $value ) $output[ $counter ][ 'facet_display_value' ] = $value;
                 $counter++;
             }
