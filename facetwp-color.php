@@ -3,7 +3,7 @@
 Plugin Name: FacetWP - Color
 Plugin URI: https://facetwp.com/
 Description: A FacetWP facet to filter products by color
-Version: 1.2
+Version: 1.3
 Author: FacetWP, LLC
 GitHub URI: facetwp/facetwp-color
 */
