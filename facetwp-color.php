@@ -3,7 +3,7 @@
 Plugin Name: FacetWP - Color
 Plugin URI: https://facetwp.com/
 Description: A FacetWP facet to filter products by color
-Version: 1.3
+Version: 1.3.1
 Author: FacetWP, LLC
 GitHub URI: facetwp/facetwp-color
 */
@@ -159,7 +159,7 @@ class FacetWP_Facet_Color
         $this.find('.facet-operator').val(obj.operator);
     });
 
-    wp.hooks.addFilter('facetwp/save/color', function($this, obj) {
+    wp.hooks.addFilter('facetwp/save/color', function(obj, $this) {
         obj['source'] = $this.find('.facet-source').val();
         obj['count'] = $this.find('.facet-count').val();
         obj['operator'] = $this.find('.facet-operator').val();
