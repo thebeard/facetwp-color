@@ -22,11 +22,12 @@ add_filter( 'facetwp_facet_types', 'fwp_color_facet' );
  */
 class FacetWP_Facet_Color
 {
+	private $yith_color_label_supported = false;
 
     function __construct() {
-        $this->label = __( 'Color', 'fwp' );
-    }
-
+		$this->label = __( 'Color', 'fwp' );
+		$this->init_yith_color_label_support();
+	}	
 
     /**
      * Load the available choices
@@ -84,7 +85,7 @@ class FacetWP_Facet_Color
 
         $output = $wpdb->get_results( $sql, ARRAY_A );
 
-        return apply_filters( 'facetwp_color_values', $output );
+        return apply_filters( 'facetwp_color_values', $output, $this->get_data_source( $params ) );
     }
 
 
@@ -101,8 +102,19 @@ class FacetWP_Facet_Color
 
         foreach ( $values as $result ) {
             $selected = in_array( $result['facet_value'], $selected_values ) ? ' checked' : '';
-            $selected .= ( 0 == $result['counter'] ) ? ' disabled' : '';
-            $output .= '<div class="facetwp-color' . $selected . '" data-value="' . $result['facet_value'] . '" data-color="' . esc_attr( $result['facet_display_value'] ) . '"></div>';
+			$selected .= ( 0 == $result['counter'] ) ? ' disabled' : '';
+			
+			$attributes = array(
+				'class' => 'facetwp-color' . $selected,
+				'data_value' => $result['facet_value'],
+				'data-color' => esc_attr( $result['facet_display_value'] )
+			);
+
+			$output .= '<div';
+			foreach( apply_filters( 'facetwp_selector_html_attributes', $attributes, $result['term_id'], $this->get_data_source( $params ) ) as $key => $value ) {
+				if ( $value ) $output .= sprintf( ' %s="%s"', $key, $value );
+			}
+			$output .= "></div>";			
         }
 
         return $output;
@@ -267,21 +279,66 @@ class FacetWP_Facet_Color
             <td><input type="text" class="facet-count" value="10" /></td>
         </tr>
 <?php
-    }
+	}
+	
+	/**
+     * Allow global scope to set initiated support
+     */
+	private function init_yith_color_label_support() {
+		do_action( 'init_facetwp_color_yith_color_label_support', $this );
+	}
+
+	/**
+     * Set support value
+     */
+	public function set_yith_color_label_support( $set = true ) {
+		$this->yith_color_label_supported = $set;
+	}
+
+	/**
+     * Get support value
+     */
+	public function yith_color_label_support() {
+		return $this->yith_color_label_supported;
+	}
+
+	/**
+     * Get data source
+     */
+	private function get_data_source( $params ) {
+		if ( $this->yith_color_label_support() && !empty( $params ) && isset( $params[ 'facet' ] ) && isset( $params[ 'facet' ][ 'source' ] ) ) return substr( $params[ 'facet' ][ 'source' ], 4 );
+		else return null;
+	}
+
+}
+
+// Set class to include YITH support internally
+add_action( 'init_facetwp_color_yith_color_label_support', 'czythfct_set_facetwpcolor_yith_support' );
+function czythfct_set_facetwpcolor_yith_support( $facetwp_color ) {
+	if ( defined( 'YITH_WCCL' ) ) $facetwp_color->set_yith_color_label_support();
 }
 
  // Include support for YITH WooCommerce Color and Label Variations
-add_filter( 'facetwp_color_values', 'yith_color_label_facetwp_color_support', 99, 1 );
-function yith_color_label_facetwp_color_support( $output ) {
+add_filter( 'facetwp_color_values', 'yith_color_label_facetwp_color_support', 99, 2 );
+function yith_color_label_facetwp_color_support( $output, $data_source ) {
     if ( defined( 'YITH_WCCL' ) ) {
         if (!empty( $output ) ) {
             $counter = 0;
             foreach( $output as $color_selection ) {
-                $value = get_term_meta( $color_selection[ 'term_id' ], 'pa_filter-colour_yith_wccl_value', true );
+				error_log( $color_selection[ 'term_id'] );
+                $value = get_term_meta( $color_selection[ 'term_id' ], $data_source . '_yith_wccl_value', true );
                 if ( $value ) $output[ $counter ][ 'facet_display_value' ] = $value;
                 $counter++;
             }
         }
         return $output;
     }
+}
+
+add_filter( 'facetwp_selector_html_attributes', 'czythfct_color_html_attibutes', 20, 3 );
+function czythfct_color_html_attibutes( $attributes, $term_id, $data_source ) {
+	$attributes[ 'title' ] = get_term_meta( $term_id, $data_source . '_yith_wccl_tooltip', true );
+	$attributes[ 'data-toggle' ] = "tooltip";
+	$attributes[ 'data-placement' ] = "top";
+	return $attributes;
 }
